@@ -1,0 +1,708 @@
+body {
+    font-family: "Concert One", sans-serif;
+    background-color: #fcfbf7;
+    margin: 0;
+    color: #1e293b;
+}
+
+
+.navbar-superior {
+    background-color: #0d0d0d;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 10px 40px 10px 40px; /* MODIFICADO: Reducido para hacer la barra más chica verticalmente */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-bottom: 4px solid #eab308;
+    box-sizing: border-box;
+}
+
+.navbar-espaciador {
+    height: 140px; /* MODIFICADO: Ajustado para que el contenido no se oculte tras la barra más delgada */
+}
+
+.navbar-contenido {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+/* ➡️ Logotipo y Badge */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+    .navbar-logo img {
+        height: 52px;
+        width: auto;
+        object-fit: contain;
+    }
+
+.badge-admin {
+    background-color: #eab308;
+    color: #0d0d0d;
+    font-size: 1rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ➡️ Bloque Derecho (Alineación e Intercambio Exacto) */
+.navbar-derecha {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+    /* ==========================================================================
+    🎯 BOTÓN COMPACTO PARA MANTENER LA BARRA DELGADA
+    ========================================================================= */
+
+    /* 1. Botón "Ver Tienda" (Letra más grande, pero botón delgado) */
+    .navbar-derecha .btn-ver-tienda {
+        background-color: #262626;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 6px 14px; /* Relleno plano y delgado para NO ensanchar la barra */
+        font-size: 1.4rem !important; /* Agrandamos la letra para que Concert One luzca clara */
+        font-weight: 400;
+        border-radius: 20px; /* Ajustado al nuevo tamaño compacto */
+        border: 1px solid #404040;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+        /* Hover con ruta amarrada */
+        .navbar-derecha .btn-ver-tienda:hover {
+            background-color: #ffffff;
+            color: #0d0d0d;
+            border-color: #ffffff;
+        }
+
+        /* Forzar tamaño del icono de la tiendita (🏪) sin alterar la altura */
+        .navbar-derecha .btn-ver-tienda i {
+            font-size: 1.25rem;
+        }
+
+    /* 2. Icono de Menú de Hamburguesa ☰ (Alineado y fino) */
+    .navbar-derecha .menu-icon {
+        font-size: 1.5rem; /* Tamaño equilibrado que no estira la barra */
+        color: #ffffff;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+    }
+
+        /* Hover de la hamburguesa */
+        .navbar-derecha .menu-icon:hover {
+            color: #eab308;
+        }
+
+
+
+
+
+
+
+/* Icono de Menú de Hamburguesa (En la esquina final derecha) */
+.menu-icon {
+    font-size: 38px;
+    cursor: pointer;
+    color: #ffffff;
+    transition: color 0.2s;
+    user-select: none;
+    display: inline-block;
+    line-height: 1;
+}
+
+    .menu-icon:hover {
+        color: #eab308;
+    }
+
+/* ==========================================
+    🔍 BUSCADOR CENTRADO
+    ========================================== */
+.buscador-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+    max-width: 650px;
+}
+
+#buscar {
+    width: 100%;
+    height: 38px;
+    padding: 0 20px;
+    border-radius: 19px;
+    background-color: #1a1a1a;
+    border: 1px solid #262626;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+    #buscar::placeholder {
+        color: #666666;
+    }
+
+    #buscar:focus {
+        border-color: #eab308;
+        background-color: #262626;
+        text-align: left;
+    }
+
+#btn-regresar {
+    height: 52px;
+    padding: 0 25px;
+    background: #eab308;
+    color: #0d0d0d;
+    border: none;
+    border-radius: 26px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: all 0.2s;
+}
+
+/* ==========================================
+    📂 BOTONES DE CATEGORÍAS (CARRUSEL HORIZONTAL FLUIDO)
+    ========================================== */
+#categorias-nav {
+    display: flex;
+    gap: 16px;
+    margin: 8px 0 4px 0; /* MODIFICADO: Se redujo el margen superior de 20px a 8px para quitar espacio muerto */
+    justify-content: flex-start; /* Permite que el contenido fluya de izquierda a derecha de forma natural */
+    overflow-x: auto; /* Activa el scroll horizontal cuando las categorías sobrepasen la pantalla */
+    overflow-y: hidden; /* Evita scrolls verticales innecesarios */
+    white-space: nowrap; /* Mantiene absolutamente todos los botones en una sola fila continua */
+    padding: 10px 40px;
+    scroll-behavior: smooth; /* Hace que el deslizamiento sea suave */
+    /* Oculta la barra de desplazamiento visual para mantener limpio tu diseño */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE y Edge */
+}
+
+    /* Oculta la barra de scroll en navegadores basados en Webkit (Chrome, Safari, Opera) */
+    #categorias-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+.btn-nav {
+    background-color: transparent;
+    color: #a3a3a3;
+    border: 1px solid #262626;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    display: inline-block;
+    user-select: none;
+}
+
+    .btn-nav:hover {
+        background: #ffffff;
+        color: #0d0d0d;
+        border-color: #ffffff;
+    }
+
+/* ==========================================
+    🗂️ MENÚ LATERAL (SIDEBAR DESDE LA DERECHA)
+    ========================================== */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    right: 0;
+    background-color: #0d0d0d;
+    overflow-x: hidden;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-top: 80px;
+    box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+    border-left: 3px solid #eab308;
+}
+
+.sidebar-header {
+    padding: 10px 24px 20px 24px;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 15px;
+}
+
+    .sidebar-header h3 {
+        color: #eab308;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+.sidebar button {
+    display: block;
+    width: 85%;
+    margin: 12px auto;
+    padding: 14px;
+    border-radius: 10px;
+    background: #1a1a1a;
+    color: #cbd5e1;
+    border: 1px solid #262626;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+    .sidebar button:hover {
+        background: #262626;
+        color: #ffffff;
+        border-color: #404040;
+    }
+
+    .sidebar button:first-of-type {
+        background: #eab308;
+        color: #0d0d0d;
+        border: none;
+        font-weight: 700;
+    }
+
+        .sidebar button:first-of-type:hover {
+            background: #ffffff;
+            color: #0d0d0d;
+        }
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 32px;
+    text-decoration: none;
+    color: #a3a3a3;
+    transition: color 0.2s;
+}
+
+    .sidebar .closebtn:hover {
+        color: #ffffff;
+    }
+
+.sidebar .btn-cerrar-sesion {
+    background-color: #1a1a1a;
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    margin-top: 60px;
+}
+
+    .sidebar .btn-cerrar-sesion:hover {
+        background-color: #ef4444;
+        color: white;
+        border-color: #ef4444;
+    }
+
+/* ==========================================
+    🏠 CONTENEDOR DE CONTENIDO (Y REJILLA)
+    ========================================== */
+.main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+    .main-content h2 {
+        font-size: 2.4rem !important;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 45px 0 25px 0 !important;
+    }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 30px;
+}
+
+/* --- 🪑 TARJETAS DE MUEBLE --- */
+.producto {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    text-align: left;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s;
+}
+
+    .producto:hover {
+        transform: translateY(-2px);
+    }
+
+.contenedor-media {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    background-color: #fafafa;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+    .contenedor-media img, .contenedor-media video {
+        max-height: 90%;
+        max-width: 90%;
+        object-fit: contain;
+    }
+
+/* --- 🛠️ BOTONES DE ACCIÓN EN TARJETAS --- */
+.acciones-prod {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn-editar {
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .btn-editar:hover {
+        background-color: #eab308;
+        color: #0d0d0d;
+        border-color: #eab308;
+    }
+
+.btn-borrar {
+    background-color: transparent;
+    color: #ef4444;
+    border: 1px solid #fca5a5;
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .btn-borrar:hover {
+        background-color: #ef4444;
+        color: white;
+        border-color: #ef4444;
+    }
+
+/* ==========================================
+    🏛️ MODALES (AGREGAR, EDITAR Y CATEGORÍAS)
+    ========================================== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(13, 13, 13, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 4% auto;
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    border: 1px solid #e2e8f0;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 26px;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: color 0.2s;
+}
+
+    .close:hover {
+        color: #0f172a;
+    }
+
+#formMueble input, #formMueble select, #formMueble textarea, #formCategorias input {
+    width: 100%;
+    padding: 12px 16px;
+    margin: 10px 0 16px 0;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    display: block;
+    outline: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    color: #0f172a;
+    transition: border-color 0.2s;
+}
+
+    #formMueble input:focus, #formMueble select:focus, #formMueble textarea:focus, #formCategorias input:focus {
+        border-color: #eab308;
+    }
+
+#formMueble textarea {
+    height: 95px;
+    resize: none;
+}
+
+#nuevaCategoriaInput {
+    border: 1px solid #eab308 !important;
+    background: #fffdf5;
+}
+
+#inputImagen {
+    padding: 10px !important;
+    font-size: 0.9rem;
+    background-color: #f1f5f9 !important;
+    border: 1px dashed #cbd5e1 !important;
+    cursor: pointer;
+}
+
+.btn-guardar {
+    width: 100%;
+    padding: 14px;
+    background: #0d0d0d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+    .btn-guardar:hover {
+        background: #eab308;
+        color: #0d0d0d;
+    }
+
+#listaCategoriasAdmin div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.form-inline-categorias {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-guardar-inline {
+    background-color: #0d0d0d;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    height: 44px;
+}
+
+    .btn-guardar-inline:hover {
+        background-color: #eab308;
+        color: #0d0d0d;
+    }
+
+/* ==========================================
+    ☕ PIE DE PÁGINA
+    ========================================== */
+.admin-footer {
+    text-align: center;
+    padding: 25px 20px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-top: 60px;
+    border-top: 1px solid #e2e8f0;
+    background-color: #ffffff;
+}
+
+.navbar-derecha .btn-ver-tienda {
+    background-color: #262626;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 20px;
+    border: 1px solid #404040;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+    /* Hover del botón Ver Tienda */
+    .navbar-derecha .btn-ver-tienda:hover {
+        background-color: #ffffff;
+        color: #0d0d0d;
+        border-color: #ffffff;
+    }
+
+.navbar-derecha .menu-icon {
+    font-size: 1.3rem;
+    color: #ffffff;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+    /* Hover del botón de hamburguesa */
+    .navbar-derecha .menu-icon:hover {
+        color: #eab308;
+    }
+
+.modal-confirm-fondo {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+}
+
+.modal-confirm-caja {
+    background: white;
+    margin: 15% auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-confirm-botones {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+    .modal-confirm-botones button {
+        flex: 1;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+    }
+
+
+@media (max-width: 768px) {
+    /* 1. Navbar más compacto en móvil */
+    .navbar-superior {
+        padding: 10px 15px;
+    }
+
+    .navbar-contenido {
+        flex-wrap: wrap; /* Permite que los elementos bajen de renglón */
+        gap: 15px;
+    }
+
+    .navbar-logo {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .buscador-contenedor {
+        width: 100%;
+        order: 3; /* El buscador pasa al final */
+        gap: 5px;
+    }
+
+    #buscar {
+        font-size: 0.9rem;
+    }
+
+    .navbar-derecha {
+        order: 2;
+    }
+
+    /* 2. Ajuste del espaciador */
+    .navbar-espaciador {
+        height: 180px; /* Un poco más alto para dejar espacio al buscador que bajó */
+    }
+
+    /* 3. Rejilla de productos (1 sola columna) */
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    /* 4. Ajuste del Modal de Confirmación para móvil */
+    .modal-confirm-caja {
+        margin: 30% auto;
+        padding: 20px;
+    }
+
+    .modal-confirm-botones {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

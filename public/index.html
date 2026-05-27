@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo - Econo Muebles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="site-wrapper">
+        <header class="navbar-superior">
+            <div class="navbar-fila-superior">
+                <div class="navbar-logo"><img src="images/logo.png" alt="Logo"></div>
+                <div class="buscador-contenedor">
+                    <input type="text" id="buscar" placeholder="Buscar producto...">
+                    <button id="btn-regresar" class="btn-ver-todos" style="display:none;" onclick="regresarPrincipal()">Ver Todos</button>
+                </div>
+            </div>
+            <nav id="categorias-nav" class="navbar-botones"></nav>
+        </header>
+
+        <div class="navbar-espaciador"></div>
+
+        <main class="contenido-principal">
+            <div id="resultados" class="grid"></div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-contenido">
+            <div class="contacto-izq">
+                <h3>Contacto</h3>
+                <p>📞 899-456 5222 y 23</p>
+                <a href="https://www.google.com/maps/place/Economuebles/@26.0905276,-98.2827028,17z/data=!3m1!4b1!4m6!3m5!1s0x866509ad1f1e0d5f:0xd5e759f71eeadf1a!8m2!3d26.0905228!4d-98.2801279!16s%2Fg%2F11qrw1fmnz?authuser=0&entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D" class="link-mapa">📍 Calle Porfirio diaz #650, Zona Centro, 88500 Reynosa, Tamps.</a>
+            </div>
+            <div class="redes-der">
+                <h3>Encuéntranos en:</h3>
+                <div class="iconos-emoji">
+                    <a href="https://wa.me/528991230508" target="_blank" class="btn-red">🟢 WhatsApp</a>
+                    <a href="https://www.facebook.com/economueblesreynosa?locale=es_LA" target="_blank" class="btn-red">🔵 Facebook</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="lightbox" class="lightbox" onclick="cerrarLightbox()">
+        <span class="cerrar-lightbox">&times;</span>
+        <img id="img-grande" src="" alt="Imagen ampliada">
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
