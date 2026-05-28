@@ -1,12 +1,9 @@
 let productoEditando = null;
 
-// --- FUNCIÓN DEL MODAL ---
 function mostrarConfirmacion(mensaje, callbackSi) {
     const modal = document.getElementById('modalConfirmacion');
-    // Inyectamos el mensaje dinámico directamente aquí
     document.getElementById('modalConfMensaje').innerText = mensaje;
     modal.style.display = 'block';
-
     document.getElementById('btnConfSi').onclick = () => {
         modal.style.display = 'none';
         callbackSi();
@@ -16,11 +13,9 @@ function mostrarConfirmacion(mensaje, callbackSi) {
     };
 }
 
-// --- FUNCIONES CORREGIDAS (SIN CONFIRM) ---
-
 function eliminar(id) {
     mostrarConfirmacion('¿Estás seguro de que deseas eliminar este producto?', async () => {
-        await fetch(`http://localhost:4000/productos/${id}`, { method: 'DELETE' });
+        await fetch(`/productos/${id}`, { method: 'DELETE' });
         cargarProductos();
     });
 }
@@ -31,9 +26,8 @@ async function guardarEdicionInline(id, nombreAnterior) {
         await renderizarListaCategoriasAdmin();
         return;
     }
-
     mostrarConfirmacion(`¿Estás seguro de que deseas cambiar el nombre de "${nombreAnterior}" a "${nuevoNombre}"?`, async () => {
-        await fetch(`http://localhost:4000/categorias/${id}`, {
+        await fetch(`/categorias/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre: nuevoNombre })
@@ -46,13 +40,11 @@ async function guardarEdicionInline(id, nombreAnterior) {
 
 async function eliminarCategoria(id) {
     mostrarConfirmacion("¿Estás seguro de que deseas eliminar esta categoría?", async () => {
-        await fetch(`http://localhost:4000/categorias/${id}`, { method: 'DELETE' });
+        await fetch(`/categorias/${id}`, { method: 'DELETE' });
         await renderizarListaCategoriasAdmin();
         await cargarCategoriasNav();
     });
 }
-
-// --- RESTO DE TU LÓGICA (NO MODIFICADA) ---
 
 function mostrarPreviewMedia(path) {
     const contenedor = document.getElementById('contenedorPreview');
@@ -68,7 +60,7 @@ function mostrarPreviewMedia(path) {
     }
     const formats = ['.mp4', '.mov', '.avi', '.mkv', '.webm', '.wmv', '.flv', '.3gp'];
     const esVideo = formats.some(ext => path.toLowerCase().endsWith(ext));
-    const urlCompleta = path.startsWith('data:') ? path : `http://localhost:4000/${path}`;
+    const urlCompleta = path.startsWith('data:') ? path : `/${path}`;
     contenedor.style.display = 'block';
     if (esVideo) {
         img.style.display = 'none'; img.src = '';
@@ -91,7 +83,7 @@ async function abrirModalAgregar() {
 }
 
 async function abrirModalEditar(id) {
-    const res = await fetch(`http://localhost:4000/productos/${id}`);
+    const res = await fetch(`/productos/${id}`);
     const prod = await res.json();
     productoEditando = prod;
     document.getElementById('modalTitulo').innerText = "Editar Producto";
@@ -105,7 +97,7 @@ async function abrirModalEditar(id) {
 }
 
 async function cargarCategoriasEnSelect() {
-    const res = await fetch('http://localhost:4000/categorias');
+    const res = await fetch('/categorias');
     const categorias = await res.json();
     const select = document.getElementById('categoriaSelect');
     select.innerHTML = '<option value="" disabled selected>Selecciona una categoría</option>';
@@ -140,7 +132,7 @@ function toggleMenu() {
 async function cargarProductos() {
     document.getElementById('buscar').value = '';
     document.getElementById('btn-regresar').style.display = 'none';
-    const res = await fetch('http://localhost:4000/productos');
+    const res = await fetch('/productos');
     const data = await res.json();
     renderizarProductos(data);
 }
@@ -173,7 +165,7 @@ function crearTarjetaProducto(prod) {
     const extension = prod.imagen?.split('.').pop().toLowerCase();
     card.innerHTML = `
         <div class="contenedor-media">
-            ${esVideo ? `<video autoplay loop muted playsinline controls><source src="http://localhost:4000/${prod.imagen}" type="video/${extension === 'mov' ? 'mp4' : extension}"></video>` : `<img src="http://localhost:4000/${prod.imagen}">`}
+            ${esVideo ? `<video autoplay loop muted playsinline controls><source src="/${prod.imagen}" type="video/${extension === 'mov' ? 'mp4' : extension}"></video>` : `<img src="/${prod.imagen}">`}
         </div>
         <h3 style="font-size:1.1rem; margin: 10px 0 5px 0; font-weight:700; color:#0f172a;">${prod.nombre}</h3>
         <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px; font-weight:400; line-height:1.4;">${prod.descripcion || 'Sin descripción'}</p>
@@ -186,7 +178,7 @@ function crearTarjetaProducto(prod) {
 }
 
 async function cargarCategoriasNav() {
-    const res = await fetch('http://localhost:4000/categorias');
+    const res = await fetch('/categorias');
     const categories = await res.json();
     const nav = document.getElementById('categorias-nav');
     if (!nav) return;
@@ -201,7 +193,7 @@ async function cargarCategoriasNav() {
 }
 
 async function filtrar(nombre) {
-    const res = await fetch(`http://localhost:4000/buscar?q=${nombre}`);
+    const res = await fetch(`/buscar?q=${nombre}`);
     const data = await res.json();
     const filtrados = data.filter(p => p.categoria.toLowerCase() === nombre.toLowerCase());
     renderizarProductosPlano(filtrados, nombre);
@@ -215,19 +207,19 @@ document.getElementById('formMueble').addEventListener('submit', async (e) => {
     if (categorySeleccionada === "OTRO_NUEVO") {
         const nuevaCatNombre = document.getElementById('nuevaCategoriaInput').value.trim();
         if (nuevaCatNombre) {
-            await fetch('http://localhost:4000/categorias', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: nuevaCatNombre }) });
+            await fetch('/categorias', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: nuevaCatNombre }) });
             categorySeleccionada = nuevaCatNombre;
             await cargarCategoriasNav();
         }
     }
     if (inputArchivo.files.length > 0) {
         const formData = new FormData(); formData.append('imagen', inputArchivo.files[0]);
-        const resUp = await fetch('http://localhost:4000/upload', { method: 'POST', body: formData });
+        const resUp = await fetch('/upload', { method: 'POST', body: formData });
         const dataUp = await resUp.json();
         pathImagen = dataUp.path;
     }
     const datos = { nombre: document.getElementById('nombre').value, categoria: categorySeleccionada, descripcion: document.getElementById('descripcion').value, imagen: pathImagen };
-    const url = productoEditando ? `http://localhost:4000/productos/${productoEditando.id_producto}` : 'http://localhost:4000/productos';
+    const url = productoEditando ? `/productos/${productoEditando.id_producto}` : '/productos';
     await fetch(url, { method: productoEditando ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) });
     cerrarModalMueble();
     cargarProductos();
@@ -240,7 +232,7 @@ async function toggleGestionCategorias() {
 }
 
 async function renderizarListaCategoriasAdmin() {
-    const res = await fetch('http://localhost:4000/categorias');
+    const res = await fetch('/categorias');
     const categorias = await res.json();
     const contenedor = document.getElementById('listaCategoriasAdmin');
     if (!contenedor) return;
@@ -264,7 +256,7 @@ document.getElementById('formCategorias').addEventListener('submit', async (e) =
     e.preventDefault();
     const nombre = document.getElementById('nuevaCategoria').value.trim();
     if (!nombre) return;
-    await fetch('http://localhost:4000/categorias', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre }) });
+    await fetch('/categorias', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre }) });
     document.getElementById('nuevaCategoria').value = '';
     await renderizarListaCategoriasAdmin();
     await cargarCategoriasNav();

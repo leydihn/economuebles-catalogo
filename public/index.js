@@ -2,18 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarCategorias();
     cargarProductos();
 
-    // Evento de búsqueda
     document.getElementById('buscar').addEventListener('input', async (e) => {
         const query = e.target.value.trim();
         const btnRegresar = document.getElementById('btn-regresar');
         if (query === '') { if (btnRegresar) btnRegresar.style.display = 'none'; cargarProductos(); return; }
         btnRegresar.style.display = 'inline-block';
-        const res = await fetch(`http://localhost:4000/buscar?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`/buscar?q=${encodeURIComponent(query)}`);
         const data = await res.json();
         renderizarProductos(data);
     });
 
-    // REINCORPORADO: Efecto para ocultar navbar al hacer scroll
     window.addEventListener("scroll", () => {
         const navbar = document.querySelector('.navbar-superior');
         if (window.scrollY > 100) navbar.classList.add('ocultar');
@@ -22,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function cargarProductos() {
-    const res = await fetch('http://localhost:4000/productos');
+    const res = await fetch('/productos');
     const data = await res.json();
     renderizarProductos(data);
 }
@@ -34,9 +32,8 @@ function renderizarProductos(data) {
         const div = document.createElement('div');
         div.className = "producto";
         let url = p.imagen || "";
-        if (url && !url.startsWith('http')) { url = 'http://localhost:4000/' + (url.startsWith('images/') ? url : 'images/' + url); }
+        if (url && !url.startsWith('http')) { url = '/' + (url.startsWith('images/') ? url : 'images/' + url); }
         const esVideo = url.match(/\.(mp4|webm|ogg|mov)$/i);
-
         const descripcionHTML = p.descripcion ? `<p>${p.descripcion}</p>` : "";
 
         div.innerHTML = `
@@ -54,7 +51,7 @@ function renderizarProductos(data) {
 }
 
 async function cargarCategorias() {
-    const res = await fetch('http://localhost:4000/categorias');
+    const res = await fetch('/categorias');
     const cat = await res.json();
     const nav = document.getElementById('categorias-nav');
     cat.forEach(c => {
@@ -63,7 +60,7 @@ async function cargarCategorias() {
         btn.textContent = c.nombre;
         btn.onclick = async () => {
             document.getElementById('btn-regresar').style.display = 'inline-block';
-            const res = await fetch(`http://localhost:4000/buscar?q=${encodeURIComponent(c.nombre)}`);
+            const res = await fetch(`/buscar?q=${encodeURIComponent(c.nombre)}`);
             const data = await res.json();
             renderizarProductos(data);
         };

@@ -85,7 +85,7 @@
 
                 <div class="form-grupo">
                     <label for="descripcion">Descripción</label>
-                    <textarea id="descripcion" placeholder="Detalles del prodcuto, mensaje, dimensiones, acabados..."></textarea>
+                    <textarea id="descripcion" placeholder="Detalles del producto, mensaje, dimensiones, acabados..."></textarea>
                 </div>
 
                 <div class="form-grupo">
@@ -102,7 +102,7 @@
                 </div>
 
                 <button type="submit" class="btn-guardar">
-                    <i class="fa-solid "></i> Guardar Producto
+                    <i class="fa-solid fa-save"></i> Guardar Producto
                 </button>
             </form>
         </div>
@@ -166,7 +166,6 @@
     <script src="admin.js"></script>
 
     <script>
-        // Evitamos que cualquier pulsación dentro del modal se propague al buscador global de admin.js
         const modalContenedor = document.getElementById('modalPassword');
         if (modalContenedor) {
             modalContenedor.addEventListener('input', function (e) {
@@ -238,7 +237,7 @@
             if (!confirmar) return;
 
             try {
-                const respuesta = await fetch('http://localhost:4000/cambiar-password', {
+                const respuesta = await fetch('/cambiar-password', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nuevoPassword: nuevaClave })
