@@ -105,4 +105,5 @@ app.get('/buscar', async (req, res) => {
     res.json(data);
 });
 
-app.listen(4000, () => console.log("Servidor en puerto 4000"));
+const port = process.env.PORT || 4000;
+app.listen(port, () => console.log(`Servidor en puerto ${port}`));
