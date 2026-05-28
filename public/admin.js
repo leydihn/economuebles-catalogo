@@ -1,9 +1,11 @@
 let productoEditando = null;
 
+// --- FUNCIÓN DEL MODAL ---
 function mostrarConfirmacion(mensaje, callbackSi) {
     const modal = document.getElementById('modalConfirmacion');
     document.getElementById('modalConfMensaje').innerText = mensaje;
     modal.style.display = 'block';
+
     document.getElementById('btnConfSi').onclick = () => {
         modal.style.display = 'none';
         callbackSi();
@@ -13,9 +15,17 @@ function mostrarConfirmacion(mensaje, callbackSi) {
     };
 }
 
-function eliminar(id) {
+// --- CONFIGURACIÓN DE SEGURIDAD ---
+const getHeaders = () => ({
+    'Content-Type': 'application/json',
+    'Authorization': localStorage.getItem('adminToken') || ''
+});
+
+// --- FUNCIONES CORREGIDAS ---
+
+async function eliminar(id) {
     mostrarConfirmacion('¿Estás seguro de que deseas eliminar este producto?', async () => {
-        await fetch(`/productos/${id}`, { method: 'DELETE' });
+        await fetch(`/productos/${id}`, { method: 'DELETE', headers: getHeaders() });
         cargarProductos();
     });
 }
@@ -26,10 +36,11 @@ async function guardarEdicionInline(id, nombreAnterior) {
         await renderizarListaCategoriasAdmin();
         return;
     }
+
     mostrarConfirmacion(`¿Estás seguro de que deseas cambiar el nombre de "${nombreAnterior}" a "${nuevoNombre}"?`, async () => {
         await fetch(`/categorias/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify({ nombre: nuevoNombre })
         });
         await renderizarListaCategoriasAdmin();
@@ -40,11 +51,13 @@ async function guardarEdicionInline(id, nombreAnterior) {
 
 async function eliminarCategoria(id) {
     mostrarConfirmacion("¿Estás seguro de que deseas eliminar esta categoría?", async () => {
-        await fetch(`/categorias/${id}`, { method: 'DELETE' });
+        await fetch(`/categorias/${id}`, { method: 'DELETE', headers: getHeaders() });
         await renderizarListaCategoriasAdmin();
         await cargarCategoriasNav();
     });
 }
+
+// --- RESTO DE TU LÓGICA ---
 
 function mostrarPreviewMedia(path) {
     const contenedor = document.getElementById('contenedorPreview');
@@ -193,7 +206,7 @@ async function cargarCategoriasNav() {
 }
 
 async function filtrar(nombre) {
-    const res = await fetch(`/buscar?q=${nombre}`);
+    const res = await fetch(`/buscar?q=${encodeURIComponent(nombre)}`);
     const data = await res.json();
     const filtrados = data.filter(p => p.categoria.toLowerCase() === nombre.toLowerCase());
     renderizarProductosPlano(filtrados, nombre);
@@ -207,20 +220,20 @@ document.getElementById('formMueble').addEventListener('submit', async (e) => {
     if (categorySeleccionada === "OTRO_NUEVO") {
         const nuevaCatNombre = document.getElementById('nuevaCategoriaInput').value.trim();
         if (nuevaCatNombre) {
-            await fetch('/categorias', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: nuevaCatNombre }) });
+            await fetch('/categorias', { method: 'POST', headers: getHeaders(), body: JSON.stringify({ nombre: nuevaCatNombre }) });
             categorySeleccionada = nuevaCatNombre;
             await cargarCategoriasNav();
         }
     }
     if (inputArchivo.files.length > 0) {
         const formData = new FormData(); formData.append('imagen', inputArchivo.files[0]);
-        const resUp = await fetch('/upload', { method: 'POST', body: formData });
+        const resUp = await fetch('/upload', { method: 'POST', headers: { 'Authorization': localStorage.getItem('adminToken') || '' }, body: formData });
         const dataUp = await resUp.json();
         pathImagen = dataUp.path;
     }
     const datos = { nombre: document.getElementById('nombre').value, categoria: categorySeleccionada, descripcion: document.getElementById('descripcion').value, imagen: pathImagen };
     const url = productoEditando ? `/productos/${productoEditando.id_producto}` : '/productos';
-    await fetch(url, { method: productoEditando ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) });
+    await fetch(url, { method: productoEditando ? 'PUT' : 'POST', headers: getHeaders(), body: JSON.stringify(datos) });
     cerrarModalMueble();
     cargarProductos();
 });
@@ -256,13 +269,13 @@ document.getElementById('formCategorias').addEventListener('submit', async (e) =
     e.preventDefault();
     const nombre = document.getElementById('nuevaCategoria').value.trim();
     if (!nombre) return;
-    await fetch('/categorias', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre }) });
+    await fetch('/categorias', { method: 'POST', headers: getHeaders(), body: JSON.stringify({ nombre }) });
     document.getElementById('nuevaCategoria').value = '';
     await renderizarListaCategoriasAdmin();
     await cargarCategoriasNav();
 });
 
-function cerrarSesion() { window.location.href = 'login.html'; }
+function cerrarSesion() { localStorage.removeItem('adminToken'); window.location.href = 'login.html'; }
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarCategoriasNav();

@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administradores</title>
 
+    <script>
+        if (!localStorage.getItem('adminToken')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
@@ -233,20 +239,23 @@
                 return;
             }
 
-            const confirmar = confirm("¿Estás seguro de que deseas cambiar la contraseña del usuario diario (adEM)?");
+            const confirmar = confirm("¿Estás seguro de que deseas cambiar la contraseña del usuario diario (adEconoM)?");
             if (!confirmar) return;
 
             try {
                 const respuesta = await fetch('/cambiar-password', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem('adminToken')
+                    },
                     body: JSON.stringify({ nuevoPassword: nuevaClave })
                 });
 
                 const data = await respuesta.json();
 
                 if (data.ok) {
-                    alert("¡Contraseña cambiada con éxito! El canal diario ha sido actualizado.");
+                    alert("¡Contraseña cambiada con éxito!.");
                     cerrarModalPassword();
 
                     const buscador = document.getElementById('buscar');
