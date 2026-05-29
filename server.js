@@ -119,4 +119,8 @@ app.post('/upload', upload.single('imagen'), (req, res) => {
     res.json({ path: 'images/' + req.file.filename });
 });
 
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 app.listen(process.env.PORT || 4000, () => console.log("Servidor iniciado"));
