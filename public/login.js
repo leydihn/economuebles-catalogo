@@ -1,33 +1,33 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('loginForm');
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+    // 1. Detenemos el envío del formulario a toda costa
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        console.log("Formulario enviado, iniciando fetch...");
+    const usuario = document.getElementById('usuario').value;
+    const password = document.getElementById('password').value;
 
-        const usuario = document.getElementById('usuario').value;
-        const password = document.getElementById('password').value;
+    console.log("Enviando:", usuario, password);
 
-        try {
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usuario, password })
-            });
-
-            console.log("Respuesta recibida, estatus:", response.status);
-            const data = await response.json();
-            console.log("Datos recibidos:", data);
-
+    // 2. Usamos fetch con una ruta absoluta para asegurar que llegue al servidor
+    fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, password })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Respuesta del servidor:", data);
             if (data.ok) {
-                console.log("Redirigiendo a admin.html...");
+                // 3. Forzamos la redirección
                 window.location.href = '/admin.html';
             } else {
-                alert('Error del servidor: ' + (data.mensaje || 'Credenciales incorrectas'));
+                alert("Usuario o contraseña incorrectos");
             }
-        } catch (error) {
-            console.error("Error crítico de red:", error);
-            alert('No se pudo conectar al servidor. Revisa la consola (F12).');
-        }
-    });
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Error de conexión");
+        });
+
+    return false; // Seguridad extra contra recarga
 });
