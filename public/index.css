@@ -243,3 +243,53 @@ body {
         background: #eab308;
         color: #0d0d0d;
     }
+
+/* --- ADAPTACIÓN PARA MÓVILES (RESPONSIVE) --- */
+@media (max-width: 768px) {
+    /* 1. Ajustar el grid a 2 columnas en lugar de 3 o más */
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+
+    /* 2. Aumentar el tamaño de la letra para que sea legible */
+    body {
+        font-size: 16px;
+    }
+
+    .producto-info h2 {
+        font-size: 1.2rem; /* Títulos más grandes */
+    }
+
+    .producto-info p {
+        font-size: 1rem; /* Descripción más grande */
+    }
+
+    /* 3. Agrandar los botones de categorías */
+    .btn-nav {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    /* 4. Navbar un poco más compacto en móvil */
+    .navbar-espaciador {
+        height: 180px; /* Ajuste para dar espacio al nuevo tamaño */
+    }
+
+    .navbar-superior {
+        padding: 10px 15px;
+    }
+}
+
+/* --- ADAPTACIÓN PARA PANTALLAS MUY PEQUEÑAS --- */
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr); /* Mantiene las 2 columnas */
+        gap: 8px;
+    }
+
+    .producto {
+        padding: 10px;
+    }
+}
