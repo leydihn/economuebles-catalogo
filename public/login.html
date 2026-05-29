@@ -138,6 +138,35 @@
             }
         });
     </script>
-    <script src="login.js"></script>
+    <script>
+        console.log("Script cargado y activo");
+        const form = document.getElementById('loginForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Formulario capturado");
+            alert("¡Capturado!"); // Si esto sale, el problema eran las rutas
+
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const resp = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+
+                const data = await resp.json();
+                if (data.ok) {
+                    window.location.href = '/admin.html';
+                } else {
+                    alert('Credenciales incorrectas');
+                }
+            } catch (err) {
+                alert('Error de conexión');
+            }
+        });
+    </script>
 </body>
 </html>

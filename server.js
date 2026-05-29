@@ -32,10 +32,23 @@ const upload = multer({ storage: storage });
 // Rutas
 app.post('/login', (req, res) => {
     const { usuario, password } = req.body;
-    db.query("SELECT * FROM usuarios WHERE usuario = ? AND password = SHA2(?, 256)", [usuario, password], (err, result) => {
-        if (err) return res.status(500).json({ ok: false });
-        if (result.length > 0) res.json({ ok: true });
-        else res.status(401).json({ ok: false });
+
+    // PRUEBA: Quitamos el SHA2 para comparar texto plano directamente
+    const sql = "SELECT * FROM usuarios WHERE usuario = ? AND password = ?";
+
+    db.query(sql, [usuario, password], (err, result) => {
+        if (err) {
+            console.error("Error en BD:", err);
+            return res.status(500).json({ ok: false, mensaje: "Error en servidor" });
+        }
+
+        if (result.length > 0) {
+            console.log("Login exitoso para:", usuario);
+            res.json({ ok: true });
+        } else {
+            console.log("Login fallido: Usuario o contraseña incorrectos");
+            res.status(401).json({ ok: false, mensaje: "Usuario o contraseña incorrectos" });
+        }
     });
 });
 
