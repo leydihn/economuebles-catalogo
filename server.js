@@ -92,6 +92,14 @@ app.delete('/productos/:id', (req, res) => {
     });
 });
 
+// --- RUTA AGREGADA PARA EDITAR ---
+app.get('/productos/:id', (req, res) => {
+    db.query("SELECT * FROM productos WHERE id_producto = ?", [req.params.id], (err, data) => {
+        if (err || data.length === 0) return res.status(404).json({ error: "Producto no encontrado" });
+        res.json(data[0]);
+    });
+});
+
 app.get('/categorias', (req, res) => {
     db.query("SELECT * FROM categorias ORDER BY id_categoria DESC", (err, data) => {
         if (err) return res.status(500).json(err);

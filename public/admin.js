@@ -214,28 +214,40 @@ async function filtrar(nombre) {
 
 document.getElementById('formMueble').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const inputArchivo = document.getElementById('inputImagen');
-    let pathImagen = productoEditando ? productoEditando.imagen : '';
-    let categorySeleccionada = document.getElementById('categoriaSelect').value;
-    if (categorySeleccionada === "OTRO_NUEVO") {
-        const nuevaCatNombre = document.getElementById('nuevaCategoriaInput').value.trim();
-        if (nuevaCatNombre) {
-            await fetch('/categorias', { method: 'POST', headers: getHeaders(), body: JSON.stringify({ nombre: nuevaCatNombre }) });
-            categorySeleccionada = nuevaCatNombre;
-            await cargarCategoriasNav();
+    const btnSubmit = e.target.querySelector('button[type="submit"]');
+    const originalText = btnSubmit.innerHTML;
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = 'Procesando...';
+
+    try {
+        const inputArchivo = document.getElementById('inputImagen');
+        let pathImagen = productoEditando ? productoEditando.imagen : '';
+        let categorySeleccionada = document.getElementById('categoriaSelect').value;
+        if (categorySeleccionada === "OTRO_NUEVO") {
+            const nuevaCatNombre = document.getElementById('nuevaCategoriaInput').value.trim();
+            if (nuevaCatNombre) {
+                await fetch('/categorias', { method: 'POST', headers: getHeaders(), body: JSON.stringify({ nombre: nuevaCatNombre }) });
+                categorySeleccionada = nuevaCatNombre;
+                await cargarCategoriasNav();
+            }
         }
+        if (inputArchivo.files.length > 0) {
+            const formData = new FormData(); formData.append('imagen', inputArchivo.files[0]);
+            const resUp = await fetch('/upload', { method: 'POST', headers: { 'Authorization': localStorage.getItem('adminToken') || '' }, body: formData });
+            const dataUp = await resUp.json();
+            pathImagen = dataUp.path;
+        }
+        const datos = { nombre: document.getElementById('nombre').value, categoria: categorySeleccionada, descripcion: document.getElementById('descripcion').value, imagen: pathImagen };
+        const url = productoEditando ? `/productos/${productoEditando.id_producto}` : '/productos';
+        await fetch(url, { method: productoEditando ? 'PUT' : 'POST', headers: getHeaders(), body: JSON.stringify(datos) });
+        cerrarModalMueble();
+        await cargarProductos();
+    } catch (err) {
+        alert("Error al procesar la solicitud.");
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = originalText;
     }
-    if (inputArchivo.files.length > 0) {
-        const formData = new FormData(); formData.append('imagen', inputArchivo.files[0]);
-        const resUp = await fetch('/upload', { method: 'POST', headers: { 'Authorization': localStorage.getItem('adminToken') || '' }, body: formData });
-        const dataUp = await resUp.json();
-        pathImagen = dataUp.path;
-    }
-    const datos = { nombre: document.getElementById('nombre').value, categoria: categorySeleccionada, descripcion: document.getElementById('descripcion').value, imagen: pathImagen };
-    const url = productoEditando ? `/productos/${productoEditando.id_producto}` : '/productos';
-    await fetch(url, { method: productoEditando ? 'PUT' : 'POST', headers: getHeaders(), body: JSON.stringify(datos) });
-    cerrarModalMueble();
-    cargarProductos();
 });
 
 async function toggleGestionCategorias() {
