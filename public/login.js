@@ -26,4 +26,3 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         console.error("Error capturado:", error); // Esto saldrá en la consola F12
         alert('Error al conectar con el servidor.');
     }
-});
