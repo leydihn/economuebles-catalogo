@@ -166,5 +166,29 @@
             }
         });
     </script>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Evita que la página se recargue
+
+            const usuario = document.querySelector('input[name="usuario"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario, password })
+            });
+
+            const data = await response.json();
+            if (data.ok) {
+                window.location.href = '/admin'; // Si entra, te manda al admin
+            } else {
+                alert('Usuario o contraseña incorrectos');
+            }
+        });
+    </script>
+
+
 </body>
 </html>
