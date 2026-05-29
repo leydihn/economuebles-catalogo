@@ -18,7 +18,7 @@ body {
     flex: 1;
 }
 
-/* --- Navbar --- */
+/* --- Navbar (Con la clase para esconder) --- */
 .navbar-superior {
     background-color: #0d0d0d;
     position: fixed;
@@ -30,7 +30,12 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    transition: transform 0.3s ease;
 }
+
+    .navbar-superior.ocultar {
+        transform: translateY(-100%);
+    }
 
 .navbar-fila-superior {
     display: flex;
@@ -137,7 +142,6 @@ body {
         object-fit: contain;
     }
 
-/* --- Colores de Texto --- */
 .producto h2 {
     color: #0f172a;
     font-size: 1.2rem;
@@ -153,12 +157,18 @@ body {
 /* --- Footer Corregido --- */
 .footer {
     background: #0d0d0d;
-    color: white;
+    color: #d1d5db;
     padding: 40px;
     width: 100%;
     border-top: 4px solid #eab308;
     margin-top: auto;
 }
+
+    .footer h3 {
+        color: white;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
 
 .footer-contenido {
     display: flex;
@@ -176,7 +186,7 @@ body {
 }
 
 .link-mapa {
-    color: white !important;
+    color: #9ca3af !important;
     text-decoration: none !important;
     display: block;
     margin-top: 5px;
@@ -188,6 +198,7 @@ body {
     margin-top: 10px;
 }
 
+/* Botones delineados */
 .btn-red {
     text-decoration: none !important;
     color: white !important;
@@ -196,14 +207,17 @@ body {
     font-weight: bold;
     display: inline-flex;
     align-items: center;
+    border: 2px solid transparent; /* Base para el delineado */
 }
 
     .btn-red[href*="wa.me"] {
-        background-color: #25D366;
+        border-color: #25D366;
+        color: #25D366 !important;
     }
 
     .btn-red[href*="facebook"] {
-        background-color: #1877F2;
+        border-color: #1877F2;
+        color: #1877F2 !important;
     }
 
 /* --- Lightbox --- */
@@ -236,7 +250,6 @@ body {
     cursor: pointer;
 }
 
-/* --- Adaptación Móvil --- */
 @media (max-width: 768px) {
     .navbar-superior {
         padding: 15px;
