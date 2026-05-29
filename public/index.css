@@ -137,7 +137,7 @@ body {
         object-fit: contain;
     }
 
-/* --- Colores de Texto Corregidos --- */
+/* --- Colores de Texto --- */
 .producto h2 {
     color: #0f172a;
     font-size: 1.2rem;
@@ -150,7 +150,7 @@ body {
     line-height: 1.4;
 }
 
-/* --- Footer y Botones de Contacto --- */
+/* --- Footer Corregido --- */
 .footer {
     background: #0d0d0d;
     color: white;
@@ -158,6 +158,28 @@ body {
     width: 100%;
     border-top: 4px solid #eab308;
     margin-top: auto;
+}
+
+.footer-contenido {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.contacto-izq, .redes-der {
+    flex: 1;
+    min-width: 300px;
+}
+
+.link-mapa {
+    color: white !important;
+    text-decoration: none !important;
+    display: block;
+    margin-top: 5px;
 }
 
 .iconos-emoji {
@@ -214,6 +236,7 @@ body {
     cursor: pointer;
 }
 
+/* --- Adaptación Móvil --- */
 @media (max-width: 768px) {
     .navbar-superior {
         padding: 15px;
@@ -223,5 +246,14 @@ body {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
         margin-top: 180px;
+    }
+
+    .footer-contenido {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .iconos-emoji {
+        justify-content: center;
     }
 }
