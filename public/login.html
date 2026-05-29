@@ -109,28 +109,61 @@
             }
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const usuario = document.getElementById('usuario').value;
-            const password = document.getElementById('password').value;
+            <div class="login-box">
+            <h2>EconoMuebles</h2>
 
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ usuario, password })
-                });
+            <div id="loginForm">
+                <input type="text" id="usuario" placeholder="Usuario">
+                <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                    <input type="password" id="password" placeholder="Contraseña" style="padding-right: 45px; margin: 10px 0;">
+                    <i class="fa-solid fa-eye-slash" id="toggleLoginPassword" onclick="toggleVisibilidadLogin()" style="position: absolute; right: 15px; cursor: pointer; color: #a0aec0;"></i>
+                </div>
+                <button type="button" id="btnEntrar">Entrar al Sistema</button>
+                <a href="soporte.html">¿Olvidaste tu contraseña?</a>
+            </div>
+        </div>
 
-                const data = await response.json();
-                if (data.ok) {
-                    window.location.href = '/admin.html';
+        <script>
+            function toggleVisibilidadLogin() {
+                const inputPass = document.getElementById('password');
+                const iconoPass = document.getElementById('toggleLoginPassword');
+                if (inputPass.type === "password") {
+                    inputPass.type = "text";
+                    iconoPass.className = "fa-solid fa-eye";
+                    iconoPass.style.color = "#eab308";
                 } else {
-                    alert('Usuario o contraseña incorrectos');
+                    inputPass.type = "password";
+                    iconoPass.className = "fa-solid fa-eye-slash";
+                    iconoPass.style.color = "#a0aec0";
                 }
-            } catch (error) {
-                alert('Error al conectar con el servidor.');
             }
-        });
+
+            // AHORA ESCUCHAMOS EL CLIC DEL BOTÓN, NO EL SUBMIT DEL FORMULARIO
+            document.getElementById('btnEntrar').addEventListener('click', async () => {
+                const usuario = document.getElementById('usuario').value;
+                const password = document.getElementById('password').value;
+
+                try {
+                    const response = await fetch('/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ usuario, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.ok) {
+                        // Si el servidor dice ok, redirigimos
+                        window.location.href = '/admin.html';
+                    } else {
+                        alert('Usuario o contraseña incorrectos');
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert('Error al conectar con el servidor.');
+                }
+            });
+    </script>
     </script>
 </body>
 </html>
