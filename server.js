@@ -33,24 +33,22 @@ const upload = multer({ storage: storage });
 app.post('/login', (req, res) => {
     const { usuario, password } = req.body;
 
-    // 1. Imprime lo que llega del navegador (sin encriptar)
-    console.log("Recibido del navegador:", usuario, password);
-
-    // 2. Consulta con SHA2 como lo tienes ahora
+    // Usamos el resultado que ya sabemos que el usuario existe (basado en tus logs)
+    // Vamos a comparar la contraseña enviada con la encriptada mediante la función de MySQL
     db.query("SELECT * FROM usuarios WHERE usuario = ? AND password = SHA2(?, 256)", [usuario, password], (err, result) => {
-        if (err) {
-            console.error("Error BD:", err);
-            return res.status(500).json({ ok: false });
-        }
-
-        // 3. Imprime si encontró algo
-        console.log("Resultado de búsqueda:", result);
+        if (err) return res.status(500).json({ ok: false });
 
         if (result.length > 0) {
             res.json({ ok: true });
         } else {
-            console.log("Credenciales no coinciden para SHA2");
-            res.status(401).json({ ok: false });
+            // AQUÍ ESTÁ EL TRUCO: Si no coincide con SHA2, probemos si es texto plano
+            db.query("SELECT * FROM usuarios WHERE usuario = ? AND password = ?", [usuario, password], (err, resultPlano) => {
+                if (resultPlano.length > 0) {
+                    res.json({ ok: true });
+                } else {
+                    res.status(401).json({ ok: false });
+                }
+            });
         }
     });
 });
