@@ -1,5 +1,8 @@
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Esto DEBE detener la recarga
+    alert("El script se cargó correctamente"); // Si ves este cartel al entrar, el script funciona.
+    e.preventDefault();
+    // ... resto de tu código ...
+});
 
     const usuario = document.getElementById('usuario').value;
     const password = document.getElementById('password').value;
