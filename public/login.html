@@ -124,6 +124,9 @@
                 const data = await response.json();
 
                 if (data.ok) {
+                    // AQUÍ ESTÁ LA CORRECCIÓN:
+                    // Guardamos la llave para que admin.html te deje pasar
+                    localStorage.setItem('adminToken', 'sesion_activa');
                     window.location.href = '/admin.html';
                 } else {
                     alert('Usuario o contraseña incorrectos');
@@ -131,6 +134,13 @@
             } catch (error) {
                 console.error("Error:", error);
                 alert('Error al conectar con el servidor.');
+            }
+        });
+
+        // Soporte para tecla ENTER
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('btnEntrar').click();
             }
         });
     </script>
