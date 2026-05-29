@@ -4,11 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - EconoMuebles</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         * {
             box-sizing: border-box;
@@ -84,7 +81,6 @@
     </style>
 </head>
 <body>
-
     <div class="login-box">
         <h2>EconoMuebles</h2>
         <form id="loginForm">
@@ -99,7 +95,6 @@
     </div>
 
     <script>
-        // Función para mostrar/ocultar contraseña
         function toggleVisibilidadLogin() {
             const inputPass = document.getElementById('password');
             const iconoPass = document.getElementById('toggleLoginPassword');
@@ -114,7 +109,6 @@
             }
         }
 
-        // Lógica única de login (ruta relativa)
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const usuario = document.getElementById('usuario').value;
@@ -135,36 +129,6 @@
                 }
             } catch (error) {
                 alert('Error al conectar con el servidor.');
-            }
-        });
-    </script>
-    <script>
-        console.log("Script cargado y activo");
-        const form = document.getElementById('loginForm');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            console.log("Formulario capturado");
-            alert("¡Capturado!"); // Si esto sale, el problema eran las rutas
-
-            const usuario = document.getElementById('usuario').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                const resp = await fetch('/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ usuario, password })
-                });
-
-                const data = await resp.json();
-                if (data.ok) {
-                    window.location.href = '/admin.html';
-                } else {
-                    alert('Credenciales incorrectas');
-                }
-            } catch (err) {
-                alert('Error de conexión');
             }
         });
     </script>
