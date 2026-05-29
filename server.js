@@ -33,25 +33,27 @@ const upload = multer({ storage: storage });
 app.post('/login', (req, res) => {
     const { usuario, password } = req.body;
 
-    // PRUEBA: Quitamos el SHA2 para comparar texto plano directamente
-    const sql = "SELECT * FROM usuarios WHERE usuario = ? AND password = ?";
+    // 1. Imprime lo que llega del navegador (sin encriptar)
+    console.log("Recibido del navegador:", usuario, password);
 
-    db.query(sql, [usuario, password], (err, result) => {
+    // 2. Consulta con SHA2 como lo tienes ahora
+    db.query("SELECT * FROM usuarios WHERE usuario = ? AND password = SHA2(?, 256)", [usuario, password], (err, result) => {
         if (err) {
-            console.error("Error en BD:", err);
-            return res.status(500).json({ ok: false, mensaje: "Error en servidor" });
+            console.error("Error BD:", err);
+            return res.status(500).json({ ok: false });
         }
 
+        // 3. Imprime si encontró algo
+        console.log("Resultado de búsqueda:", result);
+
         if (result.length > 0) {
-            console.log("Login exitoso para:", usuario);
             res.json({ ok: true });
         } else {
-            console.log("Login fallido: Usuario o contraseña incorrectos");
-            res.status(401).json({ ok: false, mensaje: "Usuario o contraseña incorrectos" });
+            console.log("Credenciales no coinciden para SHA2");
+            res.status(401).json({ ok: false });
         }
     });
 });
-
 app.post('/cambiar-password', (req, res) => {
     const { nuevoPassword } = req.body;
     db.query("UPDATE usuarios SET password = SHA2(?, 256) WHERE id_usuario = 1", [nuevoPassword], (err) => {
