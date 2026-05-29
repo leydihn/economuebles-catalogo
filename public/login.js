@@ -1,28 +1,33 @@
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    alert("El script se cargó correctamente"); // Si ves este cartel al entrar, el script funciona.
-    e.preventDefault();
-    // ... resto de tu código ...
-});
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('loginForm');
 
-    const usuario = document.getElementById('usuario').value;
-    const password = document.getElementById('password').value;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        console.log("Formulario enviado, iniciando fetch...");
 
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ usuario, password })
-        });
+        const usuario = document.getElementById('usuario').value;
+        const password = document.getElementById('password').value;
 
-        const data = await response.json();
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario, password })
+            });
 
-        if (data.ok) {
-            // Si entra, redirige
-            window.location.href = '/admin.html';
-        } else {
-            alert('Usuario o contraseña incorrectos');
+            console.log("Respuesta recibida, estatus:", response.status);
+            const data = await response.json();
+            console.log("Datos recibidos:", data);
+
+            if (data.ok) {
+                console.log("Redirigiendo a admin.html...");
+                window.location.href = '/admin.html';
+            } else {
+                alert('Error del servidor: ' + (data.mensaje || 'Credenciales incorrectas'));
+            }
+        } catch (error) {
+            console.error("Error crítico de red:", error);
+            alert('No se pudo conectar al servidor. Revisa la consola (F12).');
         }
-    } catch (error) {
-        console.error("Error capturado:", error); // Esto saldrá en la consola F12
-        alert('Error al conectar con el servidor.');
-    }
+    });
+});
