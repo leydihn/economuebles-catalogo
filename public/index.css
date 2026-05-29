@@ -18,7 +18,7 @@ body {
     flex: 1;
 }
 
-/* --- Navbar (Con efecto de ocultar) --- */
+/* --- Navbar --- */
 .navbar-superior {
     background-color: #0d0d0d;
     position: fixed;
@@ -30,56 +30,50 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    transition: transform 0.3s ease-in-out;
-}
-
-    .navbar-superior.ocultar {
-        transform: translateY(-100%);
-    }
-
-.navbar-espaciador {
-    height: 140px;
 }
 
 .navbar-fila-superior {
     display: flex;
     align-items: center;
-    gap: 15px;
-    width: 100%; /* Asegura que ocupe todo el ancho */
+    gap: 20px;
+    width: 100%;
 }
 
 .navbar-logo img {
-    height: 40px; /* Reducido para que no estorbe */
-    max-width: 120px; /* Límite máximo para que no crezca */
+    height: 60px;
     width: auto;
-    flex-shrink: 0; /* Evita que el logo se encoja */
 }
-
+/* Medida original restaurada */
 .buscador-contenedor {
-    flex: 1; /* El buscador tomará todo el espacio restante */
+    flex: 1;
     display: flex;
     align-items: center;
     gap: 10px;
-    min-width: 0; /* IMPORTANTE: Permite que el buscador se encoja si es necesario */
 }
 
 #buscar {
-    flex: 1; /* Hace que el input llene el espacio */
-    height: 40px; /* Un poco más compacto */
-    padding: 0 15px;
-    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    height: 45px;
+    padding: 0 20px;
+    border-radius: 25px;
     background: #1a1a1a;
     border: 1px solid #333;
     color: white;
 }
 
 .btn-ver-todos {
-    flex-shrink: 0; /* Evita que el botón se haga pequeño */
+    background: #eab308;
+    color: #0d0d0d;
+    border: none;
+    padding: 0 20px;
+    border-radius: 20px;
+    cursor: pointer;
     height: 40px;
-    padding: 0 15px;
-}}
+    font-weight: bold;
+    font-family: "Concert One", sans-serif;
+}
 
-/* --- Categorías --- */
 .navbar-botones {
     display: flex;
     gap: 10px;
@@ -105,13 +99,13 @@ body {
         color: #0d0d0d;
     }
 
-/* --- Grid de Productos --- */
+/* --- Grid --- */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
     max-width: 1400px;
-    margin: 0 auto;
+    margin: 140px auto 20px auto;
     padding: 20px;
 }
 
@@ -142,58 +136,7 @@ body {
         object-fit: contain;
     }
 
-/* --- Texto del Producto (Tamaño corregido) --- */
-.producto-info {
-    padding: 10px 0;
-    text-align: center;
-}
-
-    .producto-info h2 {
-        font-size: 1.1rem;
-        line-height: 1.3;
-        color: #1e293b;
-        margin-bottom: 5px;
-        word-wrap: break-word;
-    }
-
-    .producto-info p {
-        font-size: 0.9rem;
-        color: #64748b;
-        line-height: 1.4;
-        margin-top: 5px;
-    }
-
-/* --- Lightbox --- */
-.lightbox {
-    display: none;
-    position: fixed;
-    z-index: 99999;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-    .lightbox img {
-        max-width: 90%;
-        max-height: 90%;
-        border-radius: 8px;
-    }
-
-.cerrar-lightbox {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    color: white;
-    font-size: 40px;
-    cursor: pointer;
-}
-
-/* --- Footer (Fijo al fondo) --- */
+/* --- Footer --- */
 .footer {
     background: #0d0d0d;
     color: white;
@@ -203,89 +146,23 @@ body {
     margin-top: auto;
 }
 
-.footer-contenido {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    gap: 30px;
-}
-
-.contacto-izq h3, .redes-der h3 {
-    color: #eab308;
-    margin-bottom: 10px;
-}
-
-.link-mapa {
-    color: #ccc;
-    text-decoration: none;
-    display: block;
-    margin-top: 10px;
-}
-
-.btn-red {
-    background: #262626;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    text-decoration: none;
-    display: inline-block;
-    border: 1px solid #404040;
-    transition: 0.3s;
-}
-
-    .btn-red:hover {
-        background: #eab308;
-        color: #0d0d0d;
+/* --- ADAPTACIÓN MÓVIL --- */
+@media (max-width: 768px) {
+    .navbar-superior {
+        padding: 15px;
     }
 
-/* --- ADAPTACIÓN PARA MÓVILES (RESPONSIVE) --- */
-@media (max-width: 768px) {
-    /* 1. Ajustar el grid a 2 columnas en lugar de 3 o más */
     .grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
-        padding: 10px;
+        margin-top: 180px;
     }
 
-    /* 2. Aumentar el tamaño de la letra para que sea legible */
-    body {
-        font-size: 16px;
-    }
-
-    .producto-info h2 {
-        font-size: 1.2rem; /* Títulos más grandes */
-    }
-
-    .producto-info p {
-        font-size: 1rem; /* Descripción más grande */
-    }
-
-    /* 3. Agrandar los botones de categorías */
-    .btn-nav {
-        font-size: 1rem;
-        padding: 10px 20px;
-    }
-
-    /* 4. Navbar un poco más compacto en móvil */
-    .navbar-espaciador {
-        height: 180px; /* Ajuste para dar espacio al nuevo tamaño */
-    }
-
-    .navbar-superior {
-        padding: 10px 15px;
-    }
-}
-
-/* --- ADAPTACIÓN PARA PANTALLAS MUY PEQUEÑAS --- */
-@media (max-width: 480px) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr); /* Mantiene las 2 columnas */
-        gap: 8px;
-    }
-
-    .producto {
-        padding: 10px;
+    /* Forzar botones a una fila en móvil */
+    .navbar-botones {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
     }
 }
